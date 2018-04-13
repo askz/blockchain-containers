@@ -1,0 +1,27 @@
+bitcoin-core:
+  image: ruimarinho/bitcoin-core:0.16.0-alpine
+  command:
+    -printtoconsole
+    -testnet=1
+    -rpcallowip=172.17.0.0/16
+    -rpcworkqueue=1024
+    -txindex=1
+    -rpcuser=test
+    -rpcpass=net
+  volumes:
+    - bitcoin-data:/home/bitcoin/.bitcoin
+
+electrum:
+  image: monaize/electrumx:latest
+  ports:
+    - 50001:50001
+    - 50002:50002
+  environment:
+    - DAEMON_URL=http://test:net@bitcoin-core:18332/
+    - TCP_PORT=50001
+    - SSL_PORT=50002
+    - RPC_PORT=8000
+    - NET=testnet
+    - COIN=BitcoinSegwit
+  volumes:
+    - electrumx-bitcoin-data:/data
