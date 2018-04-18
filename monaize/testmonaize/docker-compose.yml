@@ -1,13 +1,13 @@
 version: '2.1'
 
 services:
-  komodo_core:
+  monaize_core:
     extends:
       file: ../mainnet/docker-compose.yml
       service: komodo-core
     image: monaize/komodo-ac:latest
     environment:
-      - AC_NAME=TESTKMD
+      - AC_NAME=TESTMNZ
     command:
       -printtoconsole=1
       -txindex=1
@@ -16,11 +16,11 @@ services:
       -ac_supply=257142857
       -gen=1
     volumes:
-      - testkomodo-data:/home/komodo/.komodo
+      - testmonaize-data:/home/komodo/.komodo
       - zcash-params:/home/komodo/.zcash-params
 
 
-  komodo_core_peer:
+  monaize_core_peer:
     extends:
       file: ../mainnet/docker-compose.yml
       service: komodo-core
@@ -30,7 +30,7 @@ services:
     ports:
       - 10783
     environment:
-      - AC_NAME=TESTKMD
+      - AC_NAME=TESTMNZ
     command:
       -printtoconsole=1
       -ac_supply=257142857
@@ -42,7 +42,7 @@ services:
       -rpcport=10783
       -addnode=komodocore
     volumes:
-      - testkomodo-peer-data:/home/komodo/.komodo
+      - testmonaize-peer-data:/home/komodo/.komodo
       - zcash-params:/home/komodo/.zcash-params
 
 
@@ -55,18 +55,18 @@ services:
       - 50001
       - 50002
     environment:
-      - DAEMON_URL=http://test:net@komodo_core_peer:10783/
+      - DAEMON_URL=http://test:net@monaize_core_peer:10783/
       - TCP_PORT=50001
       - SSL_PORT=50002
       - RPC_PORT=8000
       - COIN=TestKomodo
     volumes:
-      - electrumx-testkomodo-data:/data
+      - electrumx-testmonaize-data:/data
 
 volumes:
-  testkomodo-data:
-  testkomodo-peer-data:
-  electrumx-testkomodo-data:
+  testmonaize-data:
+  testmonaize-peer-data:
+  electrumx-testmonaize-data:
   zcash-params:
     external: true
 

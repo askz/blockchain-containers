@@ -1,4 +1,4 @@
-FROM monaize/komodod:latest
+FROM monaize/komodo:latest
 
 COPY docker-entrypoint.sh /entrypoint.sh
 

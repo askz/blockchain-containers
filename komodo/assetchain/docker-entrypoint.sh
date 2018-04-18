@@ -1,27 +1,20 @@
 #!/bin/sh
-set -e
 
 KOMODO_DATA=$KOMODO_DATA/$AC_NAME
-
-if [ -z ${AC_NAME+x} ]; then
-  echo "You have to set AC_NAME environment variable to start this container"
-  exit 1;
-fi
 
 if [ $(echo "$1" | cut -c1) = "-" ]; then
   echo "$0: assuming arguments for komodod"
   set -- komodod "$@"
-  echo "Will execute: $@"
 fi
 
-if [ $(echo "$1" | cut -c1) = "-" ] || [ "$1" = "komodod" ] && [ !$(echo "$1") = "-help" ]; then
+if [ $(echo "$1" | cut -c1) = "-" ] || [ "$1" = "komodod" ] && [ $(echo "$2") != "-help" ]; then
+  if [ -z ${AC_NAME+x} ]; then
+    echo "You have to set AC_NAME environment variable to start this container"
+    exit 1;
+  fi
   mkdir -p "$KOMODO_DATA"
   chmod 700 "$KOMODO_DATA" "/home/komodo/.zcash-params"
   chown -R komodo "$KOMODO_DATA" "/home/komodo/.zcash-params"
-
-  if [ -f $KOMODO_DATA/$AC_NAME.conf ]; then
-    rm -f $KOMODO_DATA/$AC_NAME.conf
-  fi
   
   if [ -z "$(ls -A /home/komodo/.zcash-params)" ]; then
     alias exit=return
@@ -36,6 +29,9 @@ if [ $(echo "$1" | cut -c1) = "-" ] || [ "$1" = "komodod" ] && [ !$(echo "$1") =
 
   set -- "$@" -ac_name="$AC_NAME"
 
+  config=$(echo $@ | sed $'s/-/\\\n/g' | sed 's#\\##g' | grep -v komodod)
+  echo "Generating configuration:\n${config}"
+  echo "$config" > $KOMODO_DATA/$AC_NAME.conf
 
 fi
 

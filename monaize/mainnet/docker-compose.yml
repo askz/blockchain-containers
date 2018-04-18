@@ -2,7 +2,9 @@ version: '2.1'
 
 services:
   komodo-core:
-    image: monaize/komodo:latest
+    image: monaize/komodo-ac:latest
+    environment:
+      - AC_NAME=MNZ
     networks:
       - p2p
     command:
@@ -12,13 +14,17 @@ services:
       -txindex=1
       -rpcuser=main
       -rpcpassword=net
-      -addnode=5.9.102.210
-      -addnode=78.47.196.146
-      -addnode=178.63.69.164
-      -addnode=88.198.65.74
-      -addnode=5.9.122.241
-      -addnode=144.76.94.38
-      -addnode=89.248.166.91
+      -addnode=51.15.138.138
+      -addnode=51.15.86.136
+      -addnode=51.15.94.249
+      -addnode=51.15.80.18
+      -addnode=51.15.91.40
+      -addnode=51.15.54.2
+      -addnode=51.15.86.31
+      -addnode=51.15.82.29
+      -addnode=51.15.89.155
+      -addnode=51.15.202.191
+      -ac_supply=257142858
     volumes:
       - komodo-data:/home/komodo/.komodo
       - zcash-params:/home/komodo/.zcash-params
@@ -32,11 +38,11 @@ services:
       - 50001
       - 50002
     environment:
-      - DAEMON_URL=http://test:net@komodo-core:7771/
+      - DAEMON_URL=http://main:net@komodo-core:14337/
       - TCP_PORT=50001
       - SSL_PORT=50002
       - RPC_PORT=8000
-      - COIN=Komodo
+      - COIN=Monaize
     volumes:
       - electrumx-komodo-data:/data
 

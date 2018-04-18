@@ -8,6 +8,7 @@ help: ## This help.
 
 .DEFAULT_GOAL := help
 
+
 init: create-volumes create-network fetch-params ## Initialize needed files, docker network and volume
 .PHONY: init
 
@@ -20,7 +21,7 @@ rund: init ## Fire: docker-compose up -d
 .PHONY: run
 
 fetch-params: ## Fetch zcash sprout proving keys in zcash-params volume
-	docker-compose run komodo_core bash -c "HOME=/home/komodo/ /fetch-params.sh"
+	docker-compose run komodo-core bash -c "HOME=/home/komodo/ /fetch-params.sh"
 .PHONY: fetch-params
 
 create-volumes: ## Create volumes needed for komodo & electrum
@@ -37,6 +38,3 @@ clean: 	## Clean containers, volumes and networks
 	docker volume prune
 	docker network prune
 .PHONY: clean
-
-build: ## build image
-	cd ../assetchain && make build

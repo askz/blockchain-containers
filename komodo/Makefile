@@ -27,7 +27,7 @@ minor:
 	docker run --rm -v "${PWD}/":/app treeder/bump minor
 	echo "VERSION: ${VERSION}"
 
-release: patch build ## Build, version, and release to Docker Hub
+release: build ## Build, version, and release to Docker Hub
 	# tag it
 	git add -A
 	git commit -m "VERSION ${VERSION}"

@@ -38,3 +38,6 @@ clean: 	## Clean containers, volumes and networks
 	docker volume prune
 	docker network prune
 .PHONY: clean
+
+build: ## build image
+	cd .. && make build

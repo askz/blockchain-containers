@@ -11,16 +11,20 @@ help: ## This help.
 init: create-volumes create-network fetch-params ## Initialize needed files, docker network and volume
 .PHONY: init
 
-run: init ## Fire: docker-compose up
+up: init ## Fire: init && docker-compose up
 	docker-compose up
-.PHONY: run
+.PHONY: up
 
-rund: init ## Fire: docker-compose up -d
+upd: init ## Fire: init && docker-compose up -d
 	docker-compose up
+.PHONY: up
+
+run: ## ## Fire: docker-compose run monaize_core bash -c "$@"
+	docker-compose run monaize_core bash -c "$@"
 .PHONY: run
 
 fetch-params: ## Fetch zcash sprout proving keys in zcash-params volume
-	docker-compose run komodo_core bash -c "HOME=/home/komodo/ /fetch-params.sh"
+	docker-compose run monaize_core bash -c "HOME=/home/komodo/ /fetch-params.sh"
 .PHONY: fetch-params
 
 create-volumes: ## Create volumes needed for komodo & electrum
