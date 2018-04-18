@@ -1,25 +1,45 @@
-bitcoin-core:
-  image: ruimarinho/bitcoin-core:0.16.0-alpine
-  command:
-    -printtoconsole
-    -rpcallowip=172.17.0.0/16
-    -rpcworkqueue=1024
-    -txindex=1
-    -rpcuser=main
-    -rpcpass=net
-  volumes:
-    - bitcoin-data:/home/bitcoin/.bitcoin
+version: '2.1'
 
-electrum:
-  image: monaize/electrumx:latest
-  ports:
-    - 50001:50001
-    - 50002:50002
-  environment:
-    - DAEMON_URL=http://main:net@bitcoin-core:18332/
-    - TCP_PORT=50001
-    - SSL_PORT=50002
-    - RPC_PORT=8000
-    - COIN=BitcoinSegwit
-  volumes:
-    - electrumx-bitcoin-data:/data
+services:
+  bitcoin-core:
+    image: ruimarinho/bitcoin-core:0.16.0-alpine
+    ports:
+      - 8332
+    networks:
+      - p2p
+      - rpc
+    command:
+      -printtoconsole
+      -txindex=1
+      -rpcallowip=172.0.0.0/8
+      -rpcuser=main
+      -rpcpassword=net
+    volumes:
+      - bitcoin-data:/home/bitcoin/.bitcoin
+
+  electrumx:
+    image: monaize/electrumx:latest
+    networks:
+      - rpc
+      - ext
+    ports:
+      - 50001:50001
+      - 50002:50002
+    environment:
+      - DAEMON_URL=http://main:net@bitcoin-core:8332/
+      - TCP_PORT=50001
+      - SSL_PORT=50002
+      - RPC_PORT=8000
+      - COIN=BitcoinSegwit
+    volumes:
+      - electrumx-bitcoin-data:/data
+
+volumes:
+  bitcoin-data:
+  electrumx-bitcoin-data:
+
+networks:
+  ext:
+    external: true
+  p2p:
+  rpc:

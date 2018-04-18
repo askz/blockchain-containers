@@ -1,27 +1,39 @@
-bitcoin-core:
-  image: ruimarinho/bitcoin-core:0.16.0-alpine
-  command:
-    -printtoconsole
-    -testnet=1
-    -rpcallowip=172.17.0.0/16
-    -rpcworkqueue=1024
-    -txindex=1
-    -rpcuser=test
-    -rpcpass=net
-  volumes:
-    - bitcoin-data:/home/bitcoin/.bitcoin
+version: '2.1'
 
-electrum:
-  image: monaize/electrumx:latest
-  ports:
-    - 50001:50001
-    - 50002:50002
-  environment:
-    - DAEMON_URL=http://test:net@bitcoin-core:18332/
-    - TCP_PORT=50001
-    - SSL_PORT=50002
-    - RPC_PORT=8000
-    - NET=testnet
-    - COIN=BitcoinSegwit
-  volumes:
-    - electrumx-bitcoin-data:/data
+services:
+  bitcoin-core:
+    extends:
+      file: ../mainnet/docker-compose.yml
+      service: bitcoin-core
+    ports:
+      - 18332
+    command:
+      -printtoconsole
+      -testnet=1
+      -txindex=1
+      -server=1
+      -rpcallowip=172.0.0.0/8
+      -rpcuser=test
+      -rpcpassword=net
+    volumes:
+      - bitcoin-testnet-data:/home/bitcoin/.bitcoin
+
+  electrumx:
+    extends:
+      file: ../mainnet/docker-compose.yml
+      service: electrumx
+    environment:
+      - DAEMON_URL=http://test:net@bitcoin-core:18332/
+      - NET=testnet
+    volumes:
+      - electrumx-bitcoin-testnet-data:/data
+
+volumes:
+  bitcoin-testnet-data:
+  electrumx-bitcoin-testnet-data:
+
+networks:
+  ext:
+    external: true
+  p2p:
+  rpc:
