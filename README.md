@@ -8,11 +8,11 @@ This project's Dockerfiles (for other coins than bitcoin) are fully inspired fro
 Unfortunately I'm not able at the time of writing, to make alpine images work.  
 PRs are welcome !
 
-You'll find how to use each project in their respective folders.
+You'll find how to use each project by typing `make` or `make help` in each folder
 
 TODO:
   * Komodo
-    * [ ] Manual fetch params process, before starting images
+    * [x] Manual fetch params process, before starting images
     * [ ] docker-compose scale should work (not tested yet, but this would require work with volumes...)
     * [ ] Add an explorer to compose files
     * [ ] Monitoring & alerts
