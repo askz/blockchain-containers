@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  komodo-core:
+    image: monaize/komodod:testnet
+    environment:
+      - AC_NAME=TESTKMD
+    networks:
+      - p2p
+    command:
+      -printtoconsole
+      -rpcuser=test
+      -rpcpassword=net
+      -ac_supply=257142857
+      -gen
+    volumes:
+      - testkomodo-data:/home/komodo/.komodo
+      - zcash-params:/home/komodo/.zcash-params
+
+
+  komodo-core-peer2:
+    image: monaize/komodod:testnet
+    environment:
+      - AC_NAME=TESTKMD
+    networks:
+      - p2p
+      - rpc
+    command:
+      -printtoconsole
+      -ac_supply=257142857
+      -server
+      -rpcuser=test
+      -rpcpassword=net
+      -rpcallowip=172.0.0.0/8
+      -rpcport=10783
+      -addnode=komodo-core
+    volumes:
+      - testkomodo2-data:/home/komodo/.komodo
+      - zcash-params:/home/komodo/.zcash-params
+
+
+  electrum:
+    image: monaize/electrumx:latest
+    networks:
+      - rpc
+      - ext
+    ports:
+      - 50001:50001
+      - 50002:50002
+    environment:
+      - DAEMON_URL=http://test:net@komodo-core-peer2:10783/
+      - TCP_PORT=50001
+      - SSL_PORT=50002
+      - RPC_PORT=8000
+      - COIN=TestKomodo
+    volumes:
+      - electrumx-testkomodo-data:/data
+
+volumes:
+  testkomodo-data:
+  testkomodo2-data:
+  electrumx-testkomodo-data:
+  zcash-params:
+    external: true
+
+networks:
+  ext:
+    external: true
+  p2p:
+  rpc:
