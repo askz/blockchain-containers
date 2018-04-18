@@ -30,7 +30,7 @@ services:
       - zcash-params:/home/komodo/.zcash-params
 
   electrumx:
-    image: monaize/electrumx:latest
+    image: lukechilds/electrumx:v1.4
     networks:
       - rpc
       - ext
