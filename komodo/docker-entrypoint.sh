@@ -12,8 +12,8 @@ if [[ $(echo "$1" | cut -c1) = "-" ] || [ "$1" = "komodod" ]] && [ !$(echo "$1")
   chmod 700 "$KOMODO_DATA" "/home/komodo/.zcash-params"
   chown -R komodo "$KOMODO_DATA" "/home/komodo/.zcash-params"
 
-  if [ ! -f $KOMODO_DATA/komodo.conf ]; then
-    touch $KOMODO_DATA/komodo.conf
+  if [ -f $KOMODO_DATA/komodo.conf ]; then
+    rm -f $KOMODO_DATA/komodo.conf
   fi
   
   if [ -z "$(ls -A /home/komodo/.zcash-params)" ]; then

@@ -1,14 +1,16 @@
-version: '3'
+version: '2.1'
 
 services:
   komodo-core:
-    image: monaize/komodod:testnet
+    extends:
+      file: ../mainnet/docker-compose.yml
+      service: komodo-core
+    image: monaize/komodod-ac:0.1
     environment:
       - AC_NAME=TESTKMD
-    networks:
-      - p2p
     command:
       -printtoconsole
+      -txindex=1
       -rpcuser=test
       -rpcpassword=net
       -ac_supply=257142857
@@ -18,24 +20,28 @@ services:
       - zcash-params:/home/komodo/.zcash-params
 
 
-  komodo-core-peer2:
-    image: monaize/komodod:testnet
+  komodo-core-peer:
+    extends:
+      file: ../mainnet/docker-compose.yml
+      service: komodo-core
+    image: monaize/komodod-ac:0.1
+    networks:
+      - rpc
+    ports:
+      - 10783
     environment:
       - AC_NAME=TESTKMD
-    networks:
-      - p2p
-      - rpc
     command:
       -printtoconsole
       -ac_supply=257142857
-      -server
+      -txindex=1
+      -server=1
       -rpcuser=test
       -rpcpassword=net
       -rpcallowip=172.0.0.0/8
       -rpcport=10783
       -addnode=komodo-core
     volumes:
-      - testkomodo2-data:/home/komodo/.komodo
       - zcash-params:/home/komodo/.zcash-params
 
 
@@ -45,10 +51,10 @@ services:
       - rpc
       - ext
     ports:
-      - 50001:50001
-      - 50002:50002
+      - 50001
+      - 50002
     environment:
-      - DAEMON_URL=http://test:net@komodo-core-peer2:10783/
+      - DAEMON_URL=http://test:net@komodo-core-peer:10783/
       - TCP_PORT=50001
       - SSL_PORT=50002
       - RPC_PORT=8000
@@ -58,7 +64,7 @@ services:
 
 volumes:
   testkomodo-data:
-  testkomodo2-data:
+  # testkomodo-peer-data:
   electrumx-testkomodo-data:
   zcash-params:
     external: true

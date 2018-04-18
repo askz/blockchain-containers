@@ -13,7 +13,7 @@ You'll find how to use each project in their respective folders.
 TODO:
   * Komodo
     * [ ] Manual fetch params process, before starting images
-    * [ ] docker-compose scale should work (not tested yet)
+    * [ ] docker-compose scale should work (not tested yet, but this would require work with volumes...)
     * [ ] Add an explorer to compose files
     * [ ] Monitoring & alerts
     * [ ] Tests, tests & tests.

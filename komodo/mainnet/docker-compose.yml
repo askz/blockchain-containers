@@ -1,27 +1,46 @@
-komodo-core:
-  image: monaize/komodod:0.1
-  command:
-    -printtoconsole
-    -rpcallowip=172.0.0.0/8
-    -txindex=1
-    -rpcuser=main
-    -rpcpassword=net
-  volumes:
-    - komodo-data:/home/komodo/.komodo
-    - zcash-params:/home/komodo/.zcash-params
+version: '2.1'
 
-electrum:
-  image: monaize/electrumx:latest
-  links:
-    - komodo-core:komodo-core
-  ports:
-    - 50001:50001
-    - 50002:50002
-  environment:
-    - DAEMON_URL=http://main:net@komodo-core:7771/
-    - TCP_PORT=50001
-    - SSL_PORT=50002
-    - RPC_PORT=8000
-    - COIN=Komodo
-  volumes:
-    - electrumx-komodo-data:/data
+services:
+  komodo-core:
+    image: monaize/komodod:0.1
+    networks:
+      - p2p
+    command:
+      -printtoconsole
+      -rpcallowip=172.0.0.0/8
+      -server=1
+      -txindex=1
+      -rpcuser=main
+      -rpcpassword=net
+    volumes:
+      - komodo-data:/home/komodo/.komodo
+      - zcash-params:/home/komodo/.zcash-params
+
+  electrumx:
+    image: monaize/electrumx:latest
+    networks:
+      - rpc
+      - ext
+    ports:
+      - 50001
+      - 50002
+    environment:
+      - DAEMON_URL=http://test:net@komodo-core:7771/
+      - TCP_PORT=50001
+      - SSL_PORT=50002
+      - RPC_PORT=8000
+      - COIN=Komodo
+    volumes:
+      - electrumx-komodo-data:/data
+
+volumes:
+  komodo-data:
+  electrumx-komodo-data:
+  zcash-params:
+    external: true
+
+networks:
+  ext:
+    external: true
+  p2p:
+  rpc:

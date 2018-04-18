@@ -52,3 +52,5 @@ EXPOSE 7770 7771
 ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["komodod"]
+
+ADD VERSION .

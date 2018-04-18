@@ -10,17 +10,17 @@ fi
 
 if [ $(echo "$1" | cut -c1) = "-" ]; then
   echo "$0: assuming arguments for komodod"
-
   set -- komodod "$@"
+  echo "Will execute: $@"
 fi
 
-if [ $(echo "$1" | cut -c1) = "-" ] || [ "$1" = "komodod" ]; then
+if [ $(echo "$1" | cut -c1) = "-" ] || [ "$1" = "komodod" ] && [ !$(echo "$1") = "-help" ]; then
   mkdir -p "$KOMODO_DATA"
   chmod 700 "$KOMODO_DATA" "/home/komodo/.zcash-params"
   chown -R komodo "$KOMODO_DATA" "/home/komodo/.zcash-params"
 
-  if [ ! -f $KOMODO_DATA/$AC_NAME.conf ]; then
-    touch $KOMODO_DATA/$AC_NAME.conf
+  if [ -f $KOMODO_DATA/$AC_NAME.conf ]; then
+    rm -f $KOMODO_DATA/$AC_NAME.conf
   fi
   
   if [ -z "$(ls -A /home/komodo/.zcash-params)" ]; then
@@ -40,7 +40,7 @@ if [ $(echo "$1" | cut -c1) = "-" ] || [ "$1" = "komodod" ]; then
 fi
 
 if [ "$1" = "komodod" ] || [ "$1" = "komodo-cli" ] || [ "$1" = "komodo-tx" ]; then
-  echo
+  echo "Executing: $@"
   exec gosu komodo "$@"
 fi
 
