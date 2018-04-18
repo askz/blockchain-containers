@@ -1,6 +1,6 @@
 VERSION=`cat VERSION`
 USERNAME=monaize
-IMAGE=komodo-ac
+IMAGE=komodo
 build:
 	 docker build -t ${USERNAME}/${IMAGE}:latest .
 
@@ -14,7 +14,7 @@ release: patch build ## Release to Docker Hub
 	# tag it
 	git add -A
 	git commit -m "VERSION ${VERSION}"
-	git tag -a "${VERSION}" -m "VERSION ${VERSION}"
+	git tag -a "${IMAGE}@${VERSION}" -m "VERSION ${VERSION}"
 	git push
 	git push --tags
 
