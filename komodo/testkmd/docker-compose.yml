@@ -5,7 +5,7 @@ services:
     extends:
       file: ../mainnet/docker-compose.yml
       service: komodo-core
-    image: monaize/komodod-ac:0.1
+    image: monaize/komodod-ac:latest
     environment:
       - AC_NAME=TESTKMD
     command:
@@ -24,7 +24,7 @@ services:
     extends:
       file: ../mainnet/docker-compose.yml
       service: komodo-core
-    image: monaize/komodod-ac:0.1
+    image: monaize/komodod-ac:latest
     networks:
       - rpc
     ports:

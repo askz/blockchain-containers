@@ -8,49 +8,26 @@ help: ## This help.
 
 .DEFAULT_GOAL := help
 
-init: create-volumes create-network fetch-params ## Initialize needed files, docker network and volume
-.PHONY: init
-
-run: init ## Fire: docker-compose up
-	docker-compose up
-.PHONY: run
-
-rund: init ## Fire: docker-compose up -d
-	docker-compose up
-.PHONY: run
-
-fetch-params: ## Fetch zcash sprout proving keys in zcash-params volume
-	docker-compose run komodo-core bash -c "HOME=/home/komodo/ /fetch-params.sh"
-.PHONY: fetch-params
-
-create-volumes: ## Create volumes needed for komodo & electrum
-	docker volume create zcash-params || true
-.PHONY: create-volumes
-
-create-network: ## Create network needed for electrum
-	docker network create ext || true
-.PHONY: create-network
-
-clean: 	## Clean containers, volumes and networks
-	@echo -e "\nWARNING: This may touch docker artifacts from other projects than this one! Be cautious!\n"
-	docker-compose rm -vsf
-	docker volume prune
-	docker network prune
-.PHONY: clean
-
 VERSION=`cat VERSION`
 USERNAME=monaize
 IMAGE=komodo-ac
-build:
+build: ## Build image monaize/komodo-ac:latest
 	 docker build -t ${USERNAME}/${IMAGE}:latest .
 
-patch:
+pull:
 	git pull
+
+patch: pull
 	# bump VERSION
 	docker run --rm -v "${PWD}/":/app treeder/bump patch
 	echo "VERSION: ${VERSION}"
 
-release: patch build ## Release to Docker Hub
+minor: pull
+	# bump VERSION
+	docker run --rm -v "${PWD}/":/app treeder/bump minor
+	echo "VERSION: ${VERSION}"
+
+release: patch build ## Build, version and release to Docker Hub
 	# tag it
 	git add -A
 	git commit -m "VERSION ${VERSION}"
