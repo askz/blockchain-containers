@@ -1,4 +1,4 @@
-VERSION=`cat ../VERSION`
+VERSION=`cat VERSION`
 USERNAME=monaize
 IMAGE=komodo-ac
 build:
