@@ -3,7 +3,7 @@ version: '2.1'
 services:
   komodo_core:
     networks:
-      - rpc
+      - testkmd_rpc
     image: monaize/komodo-ac:latest
     environment:
       - AC_NAME=TESTKMD
@@ -21,27 +21,11 @@ services:
       - testkomodo-data:/home/komodo/.komodo
       - zcash-params:/home/komodo/.zcash-params
 
-  electrum:
-    image: monaize/electrumx:latest
-    networks:
-      - rpc
-    ports:
-      - 50001
-      - 50002
-    environment:
-      - DAEMON_URL=http://test:net@komodo_core:10783/
-      - TCP_PORT=50001
-      - SSL_PORT=50002
-      - RPC_PORT=8000
-      - COIN=TestKomodo
-    volumes:
-      - electrumx-testkomodo-data:/data
-
 volumes:
   testkomodo-data:
-  electrumx-testkomodo-data:
   zcash-params:
     external: true
 
 networks:
-  rpc:
+  testkmd_rpc:
+    external: true

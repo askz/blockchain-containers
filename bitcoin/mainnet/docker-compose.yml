@@ -18,7 +18,7 @@ services:
       - bitcoin-data:/home/bitcoin/.bitcoin
 
   electrumx:
-    image: ukechilds/electrumx:v1.4
+    image: lukechilds/electrumx:v1.4
     networks:
       - rpc
       - ext

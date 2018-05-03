@@ -1,0 +1,31 @@
+version: '2.1'
+
+services:
+  explorer:
+    image: monaize/rpc-explorer:0.1
+    networks:
+      - testkmd_rpc
+      - traefik
+    # ports:
+    #   - 3002
+    environment:
+      - COIN=TESTKMD
+      - RPC_PORT=10783
+      - DEBUG=*
+    labels:
+      - "traefik.backend=explorer"
+      - "traefik.docker.network=traefik"
+      - "traefik.port=3002"
+      - "traefik.enable=true"
+      - "traefik.default.protocol=http"
+      - "traefik.frontend.rule=Host: testkmd.explorer.monaize.com"
+      # - "traefik.admin.frontend.rule=Host: testkmd.explorer.monaize.com"
+      # - "traefik.admin.protocol=http"
+      # - "traefik.admin.port=9443"
+      # - "traefik.frontend.xentryPoints=http"
+
+networks:
+  testkmd_rpc:
+    external: true
+  traefik:
+    external: true

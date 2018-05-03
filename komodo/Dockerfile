@@ -4,9 +4,6 @@ LABEL maintainer.0="João Fonseca (@joaopaulofonseca)" \
   maintainer.1="Pedro Branco (@pedrobranco)" \
   maintainer.2="Rui Marinho (@ruimarinho)"
 
-ARG KOMODO_GIT_URL=https://github.com/KomodoPlatform/komodo
-ARG KOMODO_BRANCH=master
-
 RUN useradd -r komodo \
   && apt-get update -y \
   && apt-get install -y curl gnupg git build-essential dnsutils pkg-config libcurl4-gnutls-dev libc6-dev libevent-dev m4 g++-multilib autoconf libtool libncurses5-dev unzip python zlib1g-dev wget bsdmainutils automake libboost-all-dev libssl-dev libprotobuf-dev protobuf-compiler libqt4-dev libqrencode-dev libdb++-dev ntp ntpdate \
@@ -30,18 +27,19 @@ RUN curl -o /usr/local/bin/gosu -fSL https://github.com/tianon/gosu/releases/dow
   && chmod +x /usr/local/bin/gosu
 
 ENV KOMODO_DATA=/home/komodo/.komodo
-ENV PATH=/opt/komodo/bin:$PATH
 
-# TODO: Reunify those two steps to gain space
-RUN git clone --depth 1 -b ${KOMODO_BRANCH} ${KOMODO_GIT_URL} /tmp/build/komodo
+WORKDIR /tmp/build
 
-WORKDIR /tmp/build/komodo
+ARG KOMODO_GIT_URL=https://github.com/KomodoPlatform/komodo
+ARG KOMODO_BRANCH=master
 
-RUN ./zcutil/build.sh -j$(nproc)
-
-RUN install -s -c src/komodo-tx src/komodod src/komodo-cli -t /usr/local/bin/ && \
-    cp ./zcutil/fetch-params.sh / && \
-    rm -rf /tmp/build/
+RUN git clone --depth 1 -b ${KOMODO_BRANCH} ${KOMODO_GIT_URL} komodo \
+  && cd komodo \
+  && ./zcutil/build.sh -j$(nproc) \
+  && install -s -c src/komodo-tx src/komodod src/komodo-cli -t /usr/local/bin/ \
+  && cp ./zcutil/fetch-params.sh / \
+  && cd - \
+  && rm -rf /tmp/build/
 
 COPY docker-entrypoint.sh /entrypoint.sh
 

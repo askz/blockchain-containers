@@ -14,6 +14,12 @@ IMAGE=komodo
 build:  ## Build image monaize/komodo:latest
 	 docker build -t ${USERNAME}/${IMAGE}:latest .
 
+build-dev:
+	docker build \
+	--build-arg KOMODO_BRANCH=dev \
+	--build-arg KOMODO_GIT_URL=https://github.com/jl777/komodo \
+	-t ${USERNAME}/${IMAGE}:latest .
+
 pull:
 	git pull
 
