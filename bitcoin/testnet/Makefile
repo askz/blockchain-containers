@@ -10,7 +10,7 @@ help: ## This help.
 
 
 run: init ## Fire: docker-compose up
-	docker-compose up
+	docker-compose up -d
 
 init: create-network ## Create networks
 

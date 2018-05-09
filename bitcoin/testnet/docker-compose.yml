@@ -6,7 +6,7 @@ services:
       file: ../mainnet/docker-compose.yml
       service: bitcoin-core
     ports:
-      - 18332
+      - 18333:18333
     command:
       -printtoconsole
       -testnet=1

@@ -4,7 +4,7 @@ services:
   bitcoin-core:
     image: ruimarinho/bitcoin-core:0.16.0-alpine
     ports:
-      - 8332
+      - 8333:8333
     networks:
       - p2p
       - rpc
@@ -23,8 +23,8 @@ services:
       - rpc
       - ext
     ports:
-      - 50001:50001
-      - 50002:50002
+      - 10000:50001
+      - 20000:50002
     environment:
       - DAEMON_URL=http://main:net@bitcoin-core:8332/
       - TCP_PORT=50001
