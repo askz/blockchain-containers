@@ -1,0 +1,35 @@
+version: '2.1'
+
+services:
+  redis:
+    image: redis:alpine
+    networks:
+      - redis
+
+  faucet:
+    image: monaize/testkmd-faucet:0.1
+    command: node app.js
+    networks:
+      - testkmd_rpc
+      - redis
+      - traefik
+    environment:
+      - PORT=3000
+    volumes:
+      - faucet-testkomodo-data:/data
+    labels:
+      - "traefik.backend=kmd-faucet"
+      - "traefik.docker.network=traefik"
+      - "traefik.port=3000"
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host: faucet.monaize.com"
+
+volumes:
+  faucet-testkomodo-data:
+
+networks:
+  traefik:
+    external: true
+  testkmd_rpc:
+    external: true
+  redis:

@@ -4,22 +4,22 @@ services:
   electrum:
     image: monaize/electrumx:latest
     networks:
-      - testkmd_rpc
+      - testmnz_rpc
     ports:
-      - 10001:50001
-      - 20001:50002
+      - 10002:50001
+      - 20002:50002
     environment:
-      - DAEMON_URL=http://test:net@komodo-core:10783/
+      - DAEMON_URL=http://test:net@monaize-core:13353/
       - TCP_PORT=50001
       - SSL_PORT=50002
       - RPC_PORT=8000
-      - COIN=TestKomodo
+      - COIN=TestMonaize
     volumes:
-      - electrumx-testkomodo-data:/data
+      - electrumx-testmonaize-data:/data
 
 volumes:
-  electrumx-testkomodo-data:
+  electrumx-testmonaize-data:
 
 networks:
-  testkmd_rpc:
+  testmnz_rpc:
     external: true

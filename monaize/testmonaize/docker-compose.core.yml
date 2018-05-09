@@ -1,12 +1,12 @@
 version: '2.1'
 
 services:
-  komodo-core:
+  monaize-core:
     networks:
-      - testkmd_rpc
+      - testmnz_rpc
     image: monaize/komodo-ac:latest
     environment:
-      - AC_NAME=TESTKMD
+      - AC_NAME=TESTMNZ
     command:
       -printtoconsole=1
       -txindex=1
@@ -14,18 +14,18 @@ services:
       -rpcuser=test
       -rpcpassword=net
       -rpcallowip=172.0.0.0/8
-      -rpcport=10783
+      -rpcport=13353
       -ac_supply=257142857
       -addnode=51.15.54.2
     volumes:
-      - testkomodo-data:/home/komodo/.komodo
+      - testmonaize-data:/home/komodo/.komodo
       - zcash-params:/home/komodo/.zcash-params
 
 volumes:
-  testkomodo-data:
+  testmonaize-data:
   zcash-params:
     external: true
 
 networks:
-  testkmd_rpc:
+  testmnz_rpc:
     external: true

@@ -1,27 +1,27 @@
 version: '2.1'
 
 services:
-  kmd_explorer:
+  mnz_explorer:
     image: monaize/rpc-explorer:0.1
     networks:
-      - testkmd_rpc
+      - testmnz_rpc
       - traefik
     # ports:
     #   - 3002
     environment:
-      - COIN=TESTKMD
-      - RPC_PORT=10783
-      - RPC_HOST=komodo-core
+      - COIN=TESTMNZ
+      - RPC_PORT=13353
+      - RPC_HOST=monaize-core
       - DEBUG=*
     labels:
-      - "traefik.backend=kmd_explorer"
+      - "traefik.backend=mnz-explorer"
       - "traefik.docker.network=traefik"
       - "traefik.port=3002"
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host: kmd.explorer.monaize.com"
+      - "traefik.frontend.rule=Host: mnz.explorer.monaize.com"
 
 networks:
-  testkmd_rpc:
+  testmnz_rpc:
     external: true
   traefik:
     external: true
